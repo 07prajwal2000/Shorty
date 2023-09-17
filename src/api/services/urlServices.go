@@ -7,6 +7,7 @@ import (
 	"shorty/data"
 	"shorty/models"
 	"shorty/utils"
+	"strings"
 )
 
 const HASH_SIZE = 8
@@ -45,6 +46,10 @@ func GetUrlById(id string) *models.GetUrlByIdResponse {
 			Message: err.Error(),
 			StatusCode: http.StatusNotFound,
 		}
+	}
+	
+	if !strings.HasPrefix(url.Original, "http://") {
+		url.Original = fmt.Sprintf("http://%s", url.Original)
 	}
 	
 	return &models.GetUrlByIdResponse{

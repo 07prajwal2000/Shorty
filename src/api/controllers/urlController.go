@@ -38,5 +38,6 @@ func getUrlByIdRoute(c echo.Context) error {
 	if urlResponse.StatusCode != http.StatusOK {
 		return c.JSON(http.StatusNotFound, urlResponse)
 	}
-	return c.Redirect(http.StatusTemporaryRedirect, urlResponse.OriginalUrl)
+
+	return c.Redirect(http.StatusPermanentRedirect, urlResponse.OriginalUrl)
 }
