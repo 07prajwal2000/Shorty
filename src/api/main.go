@@ -2,30 +2,26 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"os"
 	"shorty/controllers"
-	"text/template"
+	"shorty/initializers"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
-
-type Template struct {
-    templates *template.Template
-}
-
-func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
-    return t.templates.ExecuteTemplate(w, name, data)
-}
 
 func main()  {
 	const port = 5556
 	url := fmt.Sprintf("localhost:%d", port)
 	app := echo.New()
-	app.Renderer = &Template {
-		templates: template.Must(template.ParseGlob("templates/*.html")),
-	}
-
+	app.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"http://localhost:5173"},
+		AllowMethods: []string{"*"},
+		AllowHeaders: []string{"*"},
+		AllowCredentials: true,
+	}))
+	initializers.Initialize()
+	
 	os.Setenv("DOMAIN", fmt.Sprintf("http://%s/", url))
 
 	if len(os.Args) > 0 {
@@ -35,7 +31,7 @@ func main()  {
 		}
 	}
 	
-	controllers.MapHomeController(app)
 	controllers.MapUrlController(app)
+	
 	app.Logger.Fatal(app.Start(url))
 }

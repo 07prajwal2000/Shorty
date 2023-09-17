@@ -1,8 +1,8 @@
-package services
+package utils
 
 import "math/rand"
 
-func GenerateRandom(size int) string {
+func GenerateRandomHash(size int) string {
 	randomId := make([]byte, size)
 	for i := 0; i < size; i++ {
 		randomAscii := byte(rand.Intn(26))
