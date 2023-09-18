@@ -7,7 +7,6 @@ import (
 	"shorty/data"
 	"shorty/models"
 	"shorty/utils"
-	"strings"
 )
 
 const HASH_SIZE = 8
@@ -15,47 +14,53 @@ const HASH_SIZE = 8
 func GenerateUrl(dto *models.GenerateUrlDto) *models.GenerateUrlResponse {
 	randomId := utils.GenerateRandomHash(HASH_SIZE)
 	shortUrl := createShortUrl(randomId)
-	url := &models.Url {
-		Original: dto.OriginalUrl,
-		Hash: randomId,
+	recievedUrl := utils.AddHttpUrlPrefix(dto.OriginalUrl)
+
+	if !utils.IsValidUrl(recievedUrl) {
+		return &models.GenerateUrlResponse{
+			Original:   dto.OriginalUrl,
+			StatusCode: http.StatusBadRequest,
+			Message:    "Invalid URL",
+		}
+	}
+
+	url := &models.Url{
+		Original: recievedUrl,
+		Hash:     randomId,
 		ShortUrl: shortUrl,
 	}
 	err := data.UrlsData.AddUrl(url)
-
 	if err != nil {
 		return &models.GenerateUrlResponse{
 			StatusCode: http.StatusBadRequest,
-			Message: err.Error(),
+			Message:    err.Error(),
 		}
 	}
 
 	return &models.GenerateUrlResponse{
-		Original: dto.OriginalUrl,
-		ShortUrl: shortUrl,
-		Hash: randomId,
+		Original:   dto.OriginalUrl,
+		Modified:   recievedUrl,
+		ShortUrl:   shortUrl,
+		Hash:       randomId,
 		StatusCode: http.StatusOK,
-		Message: "Successfully created",
+		Message:    "Successfully created",
 	}
 }
 
 func GetUrlById(id string) *models.GetUrlByIdResponse {
 	url, err := data.UrlsData.GetUrlById(id)
-	
+
 	if err != nil || url == nil {
 		return &models.GetUrlByIdResponse{
-			Message: err.Error(),
+			Message:    err.Error(),
 			StatusCode: http.StatusNotFound,
 		}
 	}
-	
-	if !strings.HasPrefix(url.Original, "http://") {
-		url.Original = fmt.Sprintf("http://%s", url.Original)
-	}
-	
+
 	return &models.GetUrlByIdResponse{
 		OriginalUrl: url.Original,
-		StatusCode: http.StatusOK,
-		Message: "",
+		StatusCode:  http.StatusOK,
+		Message:     "",
 	}
 }
 

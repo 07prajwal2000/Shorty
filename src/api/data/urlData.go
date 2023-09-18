@@ -3,6 +3,7 @@ package data
 import (
 	"errors"
 	"shorty/models"
+	"time"
 )
 
 type UrlData struct {
@@ -11,7 +12,7 @@ type UrlData struct {
 
 var UrlsData *UrlData
 
-func InitializeUrlData()  {
+func InitializeUrlData() {
 	UrlsData = new(UrlData)
 	UrlsData.urlsMap = make(map[string]*models.Url)
 }
@@ -21,6 +22,7 @@ func (urlData *UrlData) AddUrl(url *models.Url) error {
 	if exists {
 		return errors.New("key already exists")
 	}
+	url.CreatedAt = time.Now().Unix()
 	urlData.urlsMap[url.Hash] = url
 	return nil
 }

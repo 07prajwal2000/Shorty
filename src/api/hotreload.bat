@@ -1,1 +1,1 @@
-nodemon --exec go run main.go --signal SIGTERM
+nodemon --exec "go run main.go" --watch ./ -e go

@@ -1,15 +1,17 @@
 package models
 
 type Url struct {
-	Original string `json:"originalUrl"`
-	ShortUrl string `json:"shortUrl"`
-	Hash     string `json:"hash"`
-	Id       string `json:"id"`
-	UserID   string `json:"userId"`
+	Original  string `json:"originalUrl"`
+	ShortUrl  string `json:"shortUrl"`
+	CreatedAt int64  `json:"createdAt"`
+	Hash      string `json:"hash"`
+	Id        string `json:"id"`
+	UserID    string `json:"userId"`
 }
 
 type GenerateUrlResponse struct {
 	Original   string `json:"originalUrl"`
+	Modified   string `json:"modifiedUrl"`
 	ShortUrl   string `json:"shortUrl"`
 	Hash       string `json:"hash"`
 	StatusCode int    `json:"statusCode"`

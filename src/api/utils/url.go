@@ -1,6 +1,14 @@
 package utils
 
-import "math/rand"
+import (
+	"math/rand"
+	"regexp"
+	"strings"
+)
+
+const URL_REGEX = `https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)`
+
+var urlRegexp, _ = regexp.Compile(URL_REGEX)
 
 func GenerateRandomHash(size int) string {
 	randomId := make([]byte, size)
@@ -14,6 +22,21 @@ func GenerateRandomHash(size int) string {
 		randomId[i] = generateCharacter(randomAscii)
 	}
 	return string(randomId)
+}
+
+func IsValidUrl(value string) bool {
+	valid := urlRegexp.MatchString(value)
+	return valid
+}
+
+func AddHttpUrlPrefix(value string) string {
+	if strings.HasPrefix(value, "http") {
+		return value
+	}
+	sb := &strings.Builder{}
+	sb.WriteString("http://")
+	sb.WriteString(value)
+	return sb.String()
 }
 
 func generateNumber() (byte, bool) {
