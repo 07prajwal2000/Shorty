@@ -15,11 +15,4 @@ This is a api server project written in Golang
 # Technologies used
 - Echo (Go HTTP Router)
 - Database (maybe Postgres 🤔)
-# Routes
-- DOMAIN/api/v1/urls/generate = POST
-    - ```json
-        {
-            "originalUrl": string
-        }
-        ```
-- DOMAIN/<URL_ID> = GET
+# Here is a [Postman Collection](https://www.postman.com/speeding-robot-624252/workspace/shorty-the-url-shortener/overview) of all the endpoints

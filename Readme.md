@@ -6,3 +6,5 @@ A URL shortener written in GO
 ### Technologies used
 - Echo (Go HTTP Router)
 - ReactJs
+
+# Here is a [Postman Collection](https://www.postman.com/speeding-robot-624252/workspace/shorty-the-url-shortener/overview) of all the endpoints
