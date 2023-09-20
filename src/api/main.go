@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"shorty/controllers"
 	"shorty/initializers"
 
 	"github.com/labstack/echo/v4"
@@ -21,6 +20,7 @@ func main() {
 		AllowCredentials: true,
 	}))
 	initializers.Initialize()
+	initializers.InitializeControllers(app)
 
 	os.Setenv("DOMAIN", fmt.Sprintf("http://%s/", url))
 
@@ -30,8 +30,6 @@ func main() {
 			fmt.Println("Running in production")
 		}
 	}
-
-	controllers.MapUrlController(app)
 
 	app.Logger.Fatal(app.Start(url))
 }
