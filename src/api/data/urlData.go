@@ -1,36 +1,30 @@
 package data
 
 import (
-	"errors"
+	data "shorty/data/postgresData"
 	"shorty/models"
-	"time"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
-type UrlData struct {
-	urlsMap map[string]*models.Url
+type IUrlRepository interface {
+	AddUrl(url *models.Url) error
+	GetUrlById(id string) (string, error)
 }
 
-var UrlsData *UrlData
+type UrlPostgresRepository struct{}
 
-func InitializeUrlData() {
-	UrlsData = new(UrlData)
-	UrlsData.urlsMap = make(map[string]*models.Url)
+func (u UrlPostgresRepository) AddUrl(url *models.Url) error {
+	_, err := postgresDb.CreateUrl(dbContext, data.CreateUrlParams{
+		Originalurl: url.Original,
+		Hash:        url.Hash,
+		CreatedAt:   pgtype.Int8{Int64: url.CreatedAt},
+		Owner:       pgtype.Int8{Int64: int64(url.UserID)},
+	})
+	return err
 }
 
-func (urlData *UrlData) AddUrl(url *models.Url) error {
-	_, exists := urlData.urlsMap[url.Hash]
-	if exists {
-		return errors.New("key already exists")
-	}
-	url.CreatedAt = time.Now().Unix()
-	urlData.urlsMap[url.Hash] = url
-	return nil
-}
-
-func (urlData *UrlData) GetUrlById(id string) (*models.Url, error) {
-	value, exists := urlData.urlsMap[id]
-	if !exists {
-		return nil, errors.New("url not found")
-	}
-	return value, nil
+func (u UrlPostgresRepository) GetUrlById(id string) (string, error) {
+	response, err := postgresDb.GetUrlByHash(dbContext, id)
+	return response.Originalurl, err
 }

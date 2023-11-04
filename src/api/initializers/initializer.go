@@ -1,7 +1,12 @@
 package initializers
 
-import "shorty/data"
+import (
+	"shorty/data"
+)
 
 func Initialize() {
-	data.InitializeUrlData()
+	data.InitializeDb()
+}
+func UnInitialize() {
+	data.UnInitializeDb()
 }

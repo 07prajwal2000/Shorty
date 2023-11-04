@@ -9,32 +9,37 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+var urlService services.IUrlServices
+
 func MapUrlController(app *echo.Echo) {
-	urlGroup := app.Group("/api/v1/urls/");
+	urlService = services.CreateUrlServices()
+
+	urlGroup := app.Group("/api/v1/urls/")
 	app.GET(":id", getUrlByIdRoute)
 	urlGroup.POST("generate", generateUrlRoute)
 }
 
 func generateUrlRoute(c echo.Context) error {
-	urlDto := &models.GenerateUrlDto {}
+	urlDto := &models.GenerateUrlDto{}
 	if err := c.Bind(urlDto); err != nil {
-		return c.JSON(http.StatusBadRequest, err)
+		return c.JSON(http.StatusBadRequest, &models.GenerateUrlResponse{
+			StatusCode: 400,
+			Message:    "Invalid JSON data format",
+		})
 	}
-	response := services.GenerateUrl(urlDto)
+	response := urlService.GenerateUrl(urlDto)
 	return c.JSON(response.StatusCode, response)
 }
 
 func getUrlByIdRoute(c echo.Context) error {
 	id := c.Param("id")
-
 	if len(id) != services.HASH_SIZE {
 		return c.JSON(http.StatusBadRequest, &models.GetUrlByIdResponse{
-			Message: fmt.Sprintf("Invalid URL ID: %s", id),
+			Message:    fmt.Sprintf("Invalid URL ID: %s", id),
 			StatusCode: http.StatusBadRequest,
 		})
 	}
-
-	urlResponse := services.GetUrlById(id)
+	urlResponse := urlService.GetUrlById(id)
 	if urlResponse.StatusCode != http.StatusOK {
 		return c.JSON(http.StatusNotFound, urlResponse)
 	}

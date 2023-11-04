@@ -5,8 +5,8 @@ type Url struct {
 	ShortUrl  string `json:"shortUrl"`
 	CreatedAt int64  `json:"createdAt"`
 	Hash      string `json:"hash"`
-	Id        string `json:"id"`
-	UserID    string `json:"userId"`
+	Id        int    `json:"id"`
+	UserID    int    `json:"userId"`
 }
 
 type GenerateUrlResponse struct {

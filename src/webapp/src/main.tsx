@@ -1,10 +1,16 @@
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import PageRouter from "./defaults/PageRouter";
-import { ThemeProvider } from "./@/components/ThemeProvider";
+import { Toaster } from "react-hot-toast";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <ThemeProvider>
-    <PageRouter />
-  </ThemeProvider>
+	<>
+		<PageRouter />
+		<Toaster
+			toastOptions={{
+				duration: 3750,
+				position: "top-right",
+			}}
+		/>
+	</>
 );

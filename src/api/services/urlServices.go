@@ -11,7 +11,22 @@ import (
 
 const HASH_SIZE = 8
 
-func GenerateUrl(dto *models.GenerateUrlDto) *models.GenerateUrlResponse {
+type IUrlServices interface {
+	GenerateUrl(dto *models.GenerateUrlDto) *models.GenerateUrlResponse
+	GetUrlById(id string) *models.GetUrlByIdResponse
+}
+
+type UrlServices struct {
+	UrlRepository data.IUrlRepository
+}
+
+func CreateUrlServices() IUrlServices {
+	return UrlServices{
+		UrlRepository: data.CreateUrlRepository(),
+	}
+}
+
+func (u UrlServices) GenerateUrl(dto *models.GenerateUrlDto) *models.GenerateUrlResponse {
 	randomId := utils.GenerateRandomHash(HASH_SIZE)
 	shortUrl := createShortUrl(randomId)
 	recievedUrl := utils.AddHttpUrlPrefix(dto.OriginalUrl)
@@ -29,7 +44,7 @@ func GenerateUrl(dto *models.GenerateUrlDto) *models.GenerateUrlResponse {
 		Hash:     randomId,
 		ShortUrl: shortUrl,
 	}
-	err := data.UrlsData.AddUrl(url)
+	err := u.UrlRepository.AddUrl(url)
 	if err != nil {
 		return &models.GenerateUrlResponse{
 			StatusCode: http.StatusBadRequest,
@@ -47,18 +62,17 @@ func GenerateUrl(dto *models.GenerateUrlDto) *models.GenerateUrlResponse {
 	}
 }
 
-func GetUrlById(id string) *models.GetUrlByIdResponse {
-	url, err := data.UrlsData.GetUrlById(id)
+func (u UrlServices) GetUrlById(id string) *models.GetUrlByIdResponse {
+	url, err := u.UrlRepository.GetUrlById(id)
 
-	if err != nil || url == nil {
+	if err != nil || url == "" {
 		return &models.GetUrlByIdResponse{
 			Message:    err.Error(),
 			StatusCode: http.StatusNotFound,
 		}
 	}
-
 	return &models.GetUrlByIdResponse{
-		OriginalUrl: url.Original,
+		OriginalUrl: url,
 		StatusCode:  http.StatusOK,
 		Message:     "",
 	}

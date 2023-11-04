@@ -30,8 +30,8 @@ func main() {
 			fmt.Println("Running in production")
 		}
 	}
-
 	controllers.MapUrlController(app)
 
 	app.Logger.Fatal(app.Start(url))
+	initializers.UnInitialize()
 }
