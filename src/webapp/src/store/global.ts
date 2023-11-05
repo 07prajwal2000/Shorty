@@ -23,3 +23,5 @@ const useGlobalStore = create<GlobalStoreType>((set) => ({
     },
 	},
 }));
+
+export default useGlobalStore;

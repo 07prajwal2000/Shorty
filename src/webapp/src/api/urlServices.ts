@@ -1,5 +1,5 @@
-import { GenerateUrlResponse } from "../models/url";
-import { PostFetcher } from "./fetcher";
+import { GenerateUrlResponse, GetShortUrlResponse } from "../models/url";
+import { GetFetcher, PostFetcher } from "./fetcher";
 
 export default class UrlService {
   private static BASE_URL = "http://localhost:5556";
@@ -7,7 +7,7 @@ export default class UrlService {
   
   private static urls = {
     generate: this.BASE_URL + '/api/v1/urls/generate',
-    getUrl: this.BASE_URL + '/api/v1/urls/',
+    redirectUrl: this.BASE_URL + '/api/v1/urls/redirect/', // :id is required
   };
 
   public static async GenerateUrl(originalUrl: string) {
@@ -15,6 +15,11 @@ export default class UrlService {
       originalUrl
     });
     return result.data as GenerateUrlResponse;
+  }
+
+  public static async GetShortUrl(id: string) {
+    const result = await GetFetcher(this.urls.redirectUrl + id);
+    return result.data as GetShortUrlResponse;
   }
 
   public static ValidateUrl(value: string): boolean {

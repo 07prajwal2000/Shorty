@@ -6,3 +6,9 @@ export type GenerateUrlResponse = {
   statusCode: number;
   message: string;
 };
+
+export type GetShortUrlResponse = {
+  originalUrl: string;
+  statusCode: number;
+  message: string;
+};

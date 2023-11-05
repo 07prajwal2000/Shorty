@@ -15,6 +15,7 @@ const GenerateShortUrl = () => {
     
 		setLoading(true);
 		setShortenUrl("");
+		
     try {
       const response = await UrlServices.GenerateUrl(originalUrl);
       setShortenUrl(response.shortUrl);

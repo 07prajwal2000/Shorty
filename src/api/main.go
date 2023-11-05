@@ -31,6 +31,7 @@ func main() {
 			fmt.Println("Running in production")
 		}
 	}
+	controllers.MapHomeController(app)
 	controllers.MapUrlController(app)
 
 	app.Logger.Fatal(app.Start(url))

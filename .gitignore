@@ -1,5 +1,6 @@
 .vscode
 .env
+**/package-lock.json
 **/node_modules
 **/.idea
 **/sqlc
@@ -7,3 +8,4 @@
 **/sqlc.yaml
 **/.env.local
 **/.env
+**/static

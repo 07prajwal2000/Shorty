@@ -15,7 +15,7 @@ func MapUrlController(app *echo.Echo) {
 	urlService = services.CreateUrlServices()
 
 	urlGroup := app.Group("/api/v1/urls/")
-	app.GET(":id", getUrlByIdRoute)
+	urlGroup.GET("redirect/:id", getUrlByIdRoute)
 	urlGroup.POST("generate", generateUrlRoute)
 }
 
@@ -44,5 +44,5 @@ func getUrlByIdRoute(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, urlResponse)
 	}
 
-	return c.Redirect(http.StatusPermanentRedirect, urlResponse.OriginalUrl)
+	return c.JSON(http.StatusOK, urlResponse)
 }
