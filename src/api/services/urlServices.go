@@ -51,7 +51,7 @@ func (u UrlServices) GenerateUrl(dto *models.GenerateUrlDto) *models.GenerateUrl
 	if err != nil {
 		return &models.GenerateUrlResponse{
 			StatusCode: http.StatusBadRequest,
-			Message:    err.Error(),
+			Message:    "Error creating the short URL",
 		}
 	}
 
@@ -70,14 +70,14 @@ func (u UrlServices) GetUrlById(id string) *models.GetUrlByIdResponse {
 
 	if err != nil || url == "" {
 		return &models.GetUrlByIdResponse{
-			Message:    err.Error(),
+			Message:    "Invalid Id",
 			StatusCode: http.StatusNotFound,
 		}
 	}
 	return &models.GetUrlByIdResponse{
 		OriginalUrl: url,
 		StatusCode:  http.StatusOK,
-		Message:     "",
+		Message:     "Url found",
 	}
 }
 
