@@ -38,15 +38,11 @@ type ResponseBody = {
   - Path: `/:id`. The api accepts a Route parameter. <u>Ex</u>: `/api/v1/urls/s6wzser5`
   
   - Description: Redirects to the URL if the ID is found in Database
-
-Response body Schema:
-
-- If the ID is not found or invalid ID
+  
+  - Response body Schema:
 
 ```typescript
-OriginalUrl :string;
-StatusCode :number;  
-Message :string;
+originalUrl :string;
+statusCode :number;  
+message :string;
 ```
-
-- If the ID is found, then it will be automatically redirected.
