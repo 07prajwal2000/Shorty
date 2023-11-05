@@ -12,6 +12,7 @@ import (
 
 func main() {
 	const port = 5556
+
 	url := fmt.Sprintf("localhost:%d", port)
 	app := echo.New()
 	app.Use(middleware.CORSWithConfig(middleware.CORSConfig{

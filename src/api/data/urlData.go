@@ -15,11 +15,15 @@ type IUrlRepository interface {
 type UrlPostgresRepository struct{}
 
 func (u UrlPostgresRepository) AddUrl(url *models.Url) error {
+	validOwner := true
+	if url.UserID < 0 {
+		validOwner = false
+	}
 	_, err := postgresDb.CreateUrl(dbContext, data.CreateUrlParams{
 		Originalurl: url.Original,
 		Hash:        url.Hash,
-		CreatedAt:   pgtype.Int8{Int64: url.CreatedAt},
-		Owner:       pgtype.Int8{Int64: int64(url.UserID)},
+		CreatedAt:   pgtype.Int8{Int64: url.CreatedAt, Valid: true},
+		Owner:       pgtype.Int8{Int64: int64(url.UserID), Valid: validOwner},
 	})
 	return err
 }

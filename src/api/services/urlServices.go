@@ -7,6 +7,7 @@ import (
 	"shorty/data"
 	"shorty/models"
 	"shorty/utils"
+	"time"
 )
 
 const HASH_SIZE = 8
@@ -40,9 +41,11 @@ func (u UrlServices) GenerateUrl(dto *models.GenerateUrlDto) *models.GenerateUrl
 	}
 
 	url := &models.Url{
-		Original: recievedUrl,
-		Hash:     randomId,
-		ShortUrl: shortUrl,
+		Original:  recievedUrl,
+		Hash:      randomId,
+		ShortUrl:  shortUrl,
+		CreatedAt: time.Now().UTC().Unix(),
+		UserID:    -1,
 	}
 	err := u.UrlRepository.AddUrl(url)
 	if err != nil {
